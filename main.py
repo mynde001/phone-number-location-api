@@ -58,11 +58,11 @@ number_formats = {
 @app.route("/api/number/<num>")
 def index(num):
     try:
-        # Matches <num>'s first 2 numbers with number_formats first 2 values
+        # Matches the first 2 numbers of num with number_formats values
         first_2_numbers_match = [[key, val] for key, val in number_formats.items() if str(val)[0:2] in num[0:2]]
 
         if len(first_2_numbers_match) > 1:
-            # If there's more than 1 item in first_2_numbers_match list - matches the 3rd number of <num> and val
+            # Matches the 3rd number of num with val's 3rd number
             third_number_match = [[key, val] for key, val in first_2_numbers_match if str(val)[2] in num[2]]
             return {
                 "country": third_number_match[0][0],

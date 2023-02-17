@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -57,14 +57,25 @@ number_formats = {
 
 @app.route("/api/number/<num>")
 def index(num):
-    # Matches <num>'s first 2 numbers with number_formats first 2 values
-    matches = [[key, val] for key, val in number_formats.items() if str(val)[0:2] in num[0:2]]
+    try:
+        # Matches <num>'s first 2 numbers with number_formats first 2 values
+        first_2_numbers_match = [[key, val] for key, val in number_formats.items() if str(val)[0:2] in num[0:2]]
 
-    if len(matches) > 1:
-        # If the first 2 numbers are duplicates - matches the 3rd number of <num> and val
-        return jsonify([[key, val] for key, val in matches if str(val)[2] in num[2]])
+        if len(first_2_numbers_match) > 1:
+            # If there's more than 1 item in first_2_numbers_match list - matches the 3rd number of <num> and val
+            third_number_match = [[key, val] for key, val in first_2_numbers_match if str(val)[2] in num[2]]
+            return {
+                "country": third_number_match[0][0],
+                "country calling code": third_number_match[0][1]
+            }
 
-    return jsonify(matches)
+        return {
+            "country": first_2_numbers_match[0][0],
+            "country calling code": first_2_numbers_match[0][1]
+        }
+
+    except IndexError:
+        return {"message": "Invalid input"}, 404
 
 if __name__ == '__main__':
     app.run(debug = True)

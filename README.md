@@ -1,2 +1,4 @@
 ### Phone number locations API - European format
-Supports 2 and 3 digit codes. Made with Flask.
+Send a GET request to /api/number/<num> endpoint
+Supports 2 and 3 digit codes
+Made with Flask
